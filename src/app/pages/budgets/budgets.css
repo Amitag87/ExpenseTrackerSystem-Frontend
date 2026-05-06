@@ -1,0 +1,64 @@
+.budget-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.budget-progress-section {
+  margin-bottom: 24px;
+}
+
+.budget-progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.budget-label {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.budget-percentage {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.budget-amounts {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.amount-group .label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.amount-group .value {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.amount-group.spent .value { color: var(--text); }
+.amount-group.limit .value { color: var(--primary); }
+
+/* Forms */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+}

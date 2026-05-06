@@ -1,0 +1,49 @@
+<header class="header">
+  <div class="header-title">{{ pageTitle }}</div>
+
+  <div class="header-actions">
+    <div class="action-btn" (click)="openNotif()">
+      <span class="icon">🔔</span>
+      <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+    </div>
+    
+    <div class="header-profile">
+      <div class="user-avatar-small">{{ userInitials() }}</div>
+      <span class="user-name-small">{{ userName() }}</span>
+    </div>
+    
+    <button class="btn btn-outline btn-sm" (click)="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- Notification Modal -->
+<div class="modal-overlay" [class.open]="showNotifModal" (click)="closeNotif()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">Notifications</span>
+      <button class="modal-close" (click)="closeNotif()">&times;</button>
+    </div>
+    <div class="notif-list">
+      @if (notifications.length) {
+        @for (notification of notifications; track notification.notificationId) {
+          <div class="notif-item">
+            <div class="notif-indicator" [class]="notifClass(notification)"></div>
+            <div class="notif-content">
+              <div class="notif-title">{{ notification.title }}</div>
+              <div class="notif-message">{{ notification.message }}</div>
+              <div class="notif-time">{{ notifTime(notification) }}</div>
+            </div>
+            @if (!notification.read) {
+              <button class="btn btn-sm btn-outline" (click)="markRead(notification)">Mark Read</button>
+            }
+          </div>
+        }
+      } @else {
+        <div class="notif-empty">
+          <span style="font-size: 32px; display: block; margin-bottom: 12px;">📭</span>
+          No new notifications
+        </div>
+      }
+    </div>
+  </div>
+</div>

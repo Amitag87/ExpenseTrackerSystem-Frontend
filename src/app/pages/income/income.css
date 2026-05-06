@@ -1,0 +1,129 @@
+.table-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.search-box .form-control {
+  padding-left: 40px;
+}
+
+.filter-group {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-group .form-control {
+  width: auto;
+  min-width: 140px;
+}
+
+/* Table Cells */
+.td-date {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.td-title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.td-method {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--border-light);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.td-amount {
+  text-align: right;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.td-amount.expense { color: var(--danger); }
+.td-amount.income { color: var(--primary); }
+
+.td-actions {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Footer */
+.table-footer {
+  padding: 20px 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.1);
+  border-radius: 0 0 16px 16px;
+}
+
+.footer-count {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.footer-total {
+  font-size: 18px;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
+/* Forms */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.checkbox-group input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-group label {
+  font-size: 14px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .table-filters { flex-direction: column; align-items: stretch; }
+  .filter-group { flex-wrap: wrap; }
+  .filter-group .form-control { flex: 1; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+}

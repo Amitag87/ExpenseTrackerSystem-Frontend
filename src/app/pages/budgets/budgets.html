@@ -1,0 +1,116 @@
+<div class="page-content-inner">
+  <div class="page-actions">
+    <button class="btn btn-primary" (click)="openCreate()">+ Create Budget</button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="card" style="padding:16px;color:var(--danger);margin-bottom:24px">{{ errorMessage }}</div>
+  }
+
+  <div class="grid-2">
+    @for (budget of budgets; track budget.budgetId) {
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">{{ categoryName(budget.categoryId) }}</span>
+          <div class="card-actions">
+            <button class="btn btn-outline btn-sm" (click)="openEdit(budget)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteBudget(budget)">Delete</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="budget-card-content">
+            <div class="budget-progress-section">
+              <div class="budget-progress-info">
+                <span class="budget-label">Progress</span>
+                <span class="budget-percentage" [class.text-danger]="calculateProgress(budget) >= 100">
+                  {{ calculateProgress(budget) | number:'1.0-0' }}%
+                </span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar" 
+                     [class.ok]="calculateProgress(budget) < 80" 
+                     [class.warn]="calculateProgress(budget) >= 80 && calculateProgress(budget) < 100" 
+                     [class.danger]="calculateProgress(budget) >= 100" 
+                     [style.width.%]="calculateProgress(budget) > 100 ? 100 : calculateProgress(budget)">
+                </div>
+              </div>
+            </div>
+            
+            <div class="budget-amounts">
+              <div class="amount-group spent">
+                <div class="label">Spent</div>
+                <div class="value">{{ formatAmount(budget.spentAmount || 0) }}</div>
+              </div>
+              <div class="amount-group limit">
+                <div class="label" style="text-align: right">Limit</div>
+                <div class="value" style="text-align: right">{{ formatAmount(budget.limitAmount) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    
+    @if (!budgets.length && !loading) {
+      <div class="card empty-card" style="grid-column: span 2;">
+        <div class="card-body" style="padding: 60px; text-align: center;">
+          <span style="font-size: 40px; display: block; margin-bottom: 16px;">🎯</span>
+          <p style="color: var(--text-dim);">No budgets set for this month. Start by creating one!</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modal Overhaul -->
+<div class="modal-overlay" [class.open]="modal.isOpen('addBudget')" (click)="modal.close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">{{ editingBudgetId ? 'Edit Budget' : 'Create Budget' }}</span>
+      <button class="modal-close" (click)="modal.close()">&times;</button>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-control" [(ngModel)]="form.categoryId">
+        <option [ngValue]="null">Select Category</option>
+        @for (category of categories; track category.categoryId) {
+          <option [ngValue]="category.categoryId">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Limit Amount</label>
+        <input class="form-control" [(ngModel)]="form.limitAmount" type="number" placeholder="0.00" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Period</label>
+        <select class="form-control" [(ngModel)]="form.period">
+          <option value="MONTHLY">Monthly</option>
+          <option value="WEEKLY">Weekly</option>
+          <option value="YEARLY">Yearly</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Start Date</label>
+        <input class="form-control" [(ngModel)]="form.startDate" type="date" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">End Date</label>
+        <input class="form-control" [(ngModel)]="form.endDate" type="date" />
+      </div>
+    </div>
+    
+    <div class="form-actions" style="margin-top:24px">
+      <button class="btn btn-outline" (click)="modal.close()">Cancel</button>
+      <button class="btn btn-primary" (click)="saveBudget()" [disabled]="saving || !form.categoryId">
+        {{ saving ? 'Saving...' : (editingBudgetId ? 'Update' : 'Create') }}
+      </button>
+    </div>
+  </div>
+</div>

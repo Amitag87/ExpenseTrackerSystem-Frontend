@@ -1,0 +1,108 @@
+<div class="page-content-inner">
+  <div class="page-top">
+    <div>
+      <h1 class="page-title">Financial Analytics</h1>
+      <p class="page-subtitle">Deep dive into your financial patterns and health</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Calculating insights...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="error-banner">
+    <span class="icon">⚠️</span>
+    {{ errorMessage }}
+  </div>
+
+  <ng-container *ngIf="!loading && !errorMessage">
+    <!-- Summary Cards -->
+    <div class="stats-grid">
+      <div class="stat-card glass">
+        <div class="stat-label">Annual Income</div>
+        <div class="stat-value text-success">{{ formatAmount(annualIncome) }}</div>
+        <div class="stat-trend">Last 12 months</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-label">Annual Expense</div>
+        <div class="stat-value text-danger">{{ formatAmount(annualExpense) }}</div>
+        <div class="stat-trend">Last 12 months</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-label">Net Savings</div>
+        <div class="stat-value text-info">{{ formatAmount(annualSavings) }}</div>
+        <div class="stat-trend">Available liquidity</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-label">Health Score</div>
+        <div class="stat-value" [style.color]="healthScore > 70 ? 'var(--success)' : (healthScore > 40 ? 'var(--warning)' : 'var(--danger)')">
+          {{ healthScore }}%
+        </div>
+        <div class="stat-trend">Based on savings rate</div>
+      </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="grid-2 mt-4">
+      <div class="card glass-card">
+        <div class="card-header">
+          <span class="card-title">Cash Flow Trend</span>
+          <span class="card-subtitle">Monthly Inflow vs Outflow</span>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas id="comparisonChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="card glass-card">
+        <div class="card-header">
+          <span class="card-title">Expense Distribution</span>
+          <span class="card-subtitle">Breakdown by category</span>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas id="distributionChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Health Trend -->
+    <div class="card glass-card mt-4">
+      <div class="card-header">
+        <span class="card-title">Financial Health Analysis</span>
+        <span class="card-subtitle">Savings rate progression over time</span>
+      </div>
+      <div class="card-body">
+        <div class="health-grid">
+          <div class="chart-main">
+            <div class="chart-container-large">
+              <canvas id="healthTrendChart"></canvas>
+            </div>
+          </div>
+          <div class="insights-panel">
+            <h4 class="insights-title">Smart Insights</h4>
+            <div class="insight-item">
+              <div class="insight-icon info"></div>
+              <div class="insight-content">
+                <div class="insight-label">Savings Velocity</div>
+                <p>Your savings rate is currently {{ (annualIncome > 0 ? (annualSavings / annualIncome * 100) : 0) | number:'1.1-1' }}%.</p>
+              </div>
+            </div>
+            <div class="insight-item">
+              <div class="insight-icon" [ngClass]="healthScore > 60 ? 'success' : 'warn'"></div>
+              <div class="insight-content">
+                <div class="insight-label">Financial Stability</div>
+                <p>{{ healthScore > 60 ? 'You are in a healthy financial position.' : 'Consider reducing discretionary expenses.' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

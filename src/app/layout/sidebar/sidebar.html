@@ -1,0 +1,64 @@
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">SpendSmart</div>
+    <div class="logo-tag">Track ? Visualize ? Save</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item" routerLink="/app/dashboard" routerLinkActive="active">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Dashboard</span>
+    </a>
+    <a class="nav-item" routerLink="/app/analytics" routerLinkActive="active">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Analytics</span>
+    </a>
+
+    <div class="nav-section-label">Transactions</div>
+    <a class="nav-item" routerLink="/app/expenses" routerLinkActive="active">
+      <span class="nav-icon">💸</span>
+      <span class="nav-label">Expenses</span>
+    </a>
+    <a class="nav-item" routerLink="/app/income" routerLinkActive="active">
+      <span class="nav-icon">💰</span>
+      <span class="nav-label">Income</span>
+    </a>
+    <a class="nav-item" routerLink="/app/recurring" routerLinkActive="active">
+      <span class="nav-icon">🔄</span>
+      <span class="nav-label">Recurring</span>
+    </a>
+
+    <div class="nav-section-label">Management</div>
+    <a class="nav-item" routerLink="/app/categories" routerLinkActive="active">
+      <span class="nav-icon">🏷️</span>
+      <span class="nav-label">Categories</span>
+    </a>
+    <a class="nav-item" routerLink="/app/budgets" routerLinkActive="active">
+      <span class="nav-icon">🎯</span>
+      <span class="nav-label">Budgets</span>
+    </a>
+    <a class="nav-item" routerLink="/app/reports" routerLinkActive="active">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Reports</span>
+    </a>
+
+    <div class="nav-section-label">Account</div>
+    <a class="nav-item" routerLink="/app/notifications" routerLinkActive="active">
+      <span class="nav-icon">🔔</span>
+      <span class="nav-label">Notifications</span>
+      <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+    </a>
+    <a class="nav-item" routerLink="/app/profile" routerLinkActive="active">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profile</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-user">
+    <div class="user-avatar">{{ userInitials() }}</div>
+    <div class="user-info">
+      <div class="user-name">{{ userName() }}</div>
+      <div class="user-role">{{ userMeta() }}</div>
+    </div>
+  </div>
+</aside>

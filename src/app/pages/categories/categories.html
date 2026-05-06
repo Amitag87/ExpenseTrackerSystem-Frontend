@@ -1,0 +1,103 @@
+<div class="page-content-inner">
+  <div class="page-actions">
+    <button class="btn btn-primary" (click)="openCreate()">+ Add Category</button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="card" style="padding:16px;color:var(--danger);margin-bottom:24px">{{ errorMessage }}</div>
+  }
+
+  <div class="card">
+    <div class="card-header">
+      <div class="table-filters">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input class="form-control" type="text" placeholder="Search categories..." [(ngModel)]="searchTerm" />
+        </div>
+        <div class="filter-group">
+          <select class="form-control" [(ngModel)]="typeFilter">
+            <option value="ALL">All Types</option>
+            <option value="EXPENSE">Expense</option>
+            <option value="INCOME">Income</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-body" style="padding:0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 60px">Color</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th style="width: 60px; text-align: center">Icon</th>
+            <th style="text-align: center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (category of filteredCategories; track category.categoryId) {
+            <tr>
+              <td><span class="cat-dot" [style.background]="category.colorCode || '#fff'" [style.color]="category.colorCode || '#fff'"></span></td>
+              <td style="font-weight: 600">{{ category.name }}</td>
+              <td><span class="pill" [class.expense]="category.type === 'EXPENSE'" [class.income]="category.type === 'INCOME'">{{ category.type }}</span></td>
+              <td class="td-icon">{{ category.icon || '-' }}</td>
+              <td class="td-actions">
+                <button class="btn btn-outline btn-sm" (click)="openEdit(category)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteCategory(category)">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      
+      @if (!filteredCategories.length && !loading) {
+        <div style="padding:60px;text-align:center;color:var(--text-dim)">No categories found.</div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overhaul -->
+<div class="modal-overlay" [class.open]="modal.isOpen('addCategory')" (click)="modal.close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">{{ editingCategoryId ? 'Edit Category' : 'Add Category' }}</span>
+      <button class="modal-close" (click)="modal.close()">&times;</button>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Category Name</label>
+      <input class="form-control" [(ngModel)]="form.name" placeholder="e.g. Entertainment" />
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-control" [(ngModel)]="form.type">
+          <option value="EXPENSE">Expense</option>
+          <option value="INCOME">Income</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Color</label>
+        <div class="color-picker-wrapper">
+          <input class="color-input" type="color" [(ngModel)]="form.color" />
+          <span class="color-hex">{{ form.color }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Icon (Emoji or Icon name)</label>
+      <input class="form-control" [(ngModel)]="form.icon" placeholder="e.g. ??" />
+    </div>
+    
+    <div class="form-actions" style="margin-top:24px">
+      <button class="btn btn-outline" (click)="modal.close()">Cancel</button>
+      <button class="btn btn-primary" (click)="saveCategory()" [disabled]="saving">
+        {{ saving ? 'Saving...' : (editingCategoryId ? 'Update' : 'Save') }}
+      </button>
+    </div>
+  </div>
+</div>
