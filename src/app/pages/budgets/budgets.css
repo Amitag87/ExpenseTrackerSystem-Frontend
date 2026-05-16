@@ -51,14 +51,6 @@
 .amount-group.spent .value { color: var(--text); }
 .amount-group.limit .value { color: var(--primary); }
 
-/* Forms */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
 @media (max-width: 768px) {
   .grid-2 { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; gap: 0; }
 }

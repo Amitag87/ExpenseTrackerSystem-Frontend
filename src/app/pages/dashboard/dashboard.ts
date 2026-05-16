@@ -1,6 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, PLATFORM_ID, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Budget, BudgetProgress, Category, Expense, Income, RecurringTransaction } from '../../core/models/api.models';
@@ -19,7 +18,7 @@ declare const Chart: any;
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

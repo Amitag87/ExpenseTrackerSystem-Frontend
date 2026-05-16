@@ -19,7 +19,7 @@ export class SidebarComponent implements OnInit {
   unreadCount = 0;
   userInitials = computed(() => initials(this.session.profile()?.fullName ?? this.session.session()?.fullName));
   userName = computed(() => this.session.profile()?.fullName ?? this.session.session()?.fullName ?? 'Your Account');
-  userMeta = computed(() => `Personal ? ${this.session.profile()?.currency ?? 'INR'}`);
+  userMeta = computed(() => `Personal / ${this.session.profile()?.currency ?? 'INR'}`);
 
   ngOnInit(): void {
     const userId = this.session.userId();

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { apiConfig } from '../config/api.config';
 import { AppNotification } from '../models/api.models';
 import { normalizeNotification } from '../utils/formatters';
@@ -9,6 +9,7 @@ import { normalizeNotification } from '../utils/formatters';
 export class NotificationsApiService {
   private readonly http = inject(HttpClient);
   private readonly unreadCountSubject = new BehaviorSubject<number>(0);
+  private unreadCountRetryAt = 0;
   readonly unreadCount$ = this.unreadCountSubject.asObservable();
 
   listByRecipient(userId: number): Observable<AppNotification[]> {
@@ -19,7 +20,15 @@ export class NotificationsApiService {
   }
 
   unreadCount(userId: number): Observable<number> {
+    if (Date.now() < this.unreadCountRetryAt) {
+      return of(this.unreadCountSubject.value);
+    }
+
     return this.http.get<number>(`${apiConfig.notifications}/unread-count/${userId}`).pipe(
+      catchError(() => {
+        this.unreadCountRetryAt = Date.now() + 60000;
+        return of(this.unreadCountSubject.value);
+      }),
       tap(count => this.unreadCountSubject.next(count))
     );
   }

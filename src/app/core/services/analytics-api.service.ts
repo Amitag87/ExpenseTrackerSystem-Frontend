@@ -13,6 +13,10 @@ export class AnalyticsApiService {
     return this.http.get<MonthlySummary>(`${apiConfig.analytics}/monthly/${userId}`, { params });
   }
 
+  createSnapshot(userId: number, year: number, month: number): Observable<unknown> {
+    return this.http.post(`${apiConfig.analytics}/snapshot`, { userId, year, month });
+  }
+
   yearly(userId: number, year: number): Observable<YearlySummary> {
     const params = new HttpParams().set('year', year);
     return this.http.get<YearlySummary>(`${apiConfig.analytics}/yearly/${userId}`, { params });

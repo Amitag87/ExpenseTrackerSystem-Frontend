@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, PLATFORM_ID, inject } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { AnalyticsApiService } from '../../core/services/analytics-api.service';
 import { SessionService } from '../../core/services/session.service';
 import { formatCurrency, monthName } from '../../core/utils/formatters';
@@ -49,13 +49,16 @@ export class AnalyticsComponent implements AfterViewInit {
 
     const now = new Date();
     
-    forkJoin({
-      summary: this.analyticsApi.yearly(userId, now.getFullYear()).pipe(catchError(() => of({ income: 0, expense: 0 }))),
-      health: this.analyticsApi.health(userId).pipe(catchError(() => of(0))),
-      trends: this.analyticsApi.incomeExpenseTrend(userId).pipe(catchError(() => of([]))),
-      categories: this.analyticsApi.categoryBreakdown(userId).pipe(catchError(() => of({}))),
-      savingsTrend: this.analyticsApi.savingsRateTrend(userId).pipe(catchError(() => of([])))
-    }).subscribe({
+    this.analyticsApi.createSnapshot(userId, now.getFullYear(), now.getMonth() + 1).pipe(
+      catchError(() => of(null)),
+      switchMap(() => forkJoin({
+        summary: this.analyticsApi.yearly(userId, now.getFullYear()).pipe(catchError(() => of({ income: 0, expense: 0 }))),
+        health: this.analyticsApi.health(userId).pipe(catchError(() => of(0))),
+        trends: this.analyticsApi.incomeExpenseTrend(userId).pipe(catchError(() => of([]))),
+        categories: this.analyticsApi.categoryBreakdown(userId).pipe(catchError(() => of({}))),
+        savingsTrend: this.analyticsApi.savingsRateTrend(userId).pipe(catchError(() => of([])))
+      }))
+    ).subscribe({
       next: (data) => {
         this.annualIncome = data.summary.income;
         this.annualExpense = data.summary.expense;

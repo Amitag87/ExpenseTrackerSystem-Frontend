@@ -1,51 +1,56 @@
 <div class="page-content-inner">
-
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-icon">💰</div>
+      <div class="stat-icon">$</div>
       <div class="stat-info">
         <div class="stat-label">Total Balance</div>
         <div class="stat-value">{{ formatAmount(netSavings) }}</div>
       </div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon text-primary">📈</div>
+      <div class="stat-icon text-primary">IN</div>
       <div class="stat-info">
         <div class="stat-label">Monthly Income</div>
         <div class="stat-value text-primary">+{{ formatAmount(totalIncome) }}</div>
       </div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon" style="color: var(--danger)">📉</div>
+      <div class="stat-icon" style="color: var(--danger)">EX</div>
       <div class="stat-info">
         <div class="stat-label">Monthly Expenses</div>
-        <div class="stat-value" style="color: var(--danger)">-{{ formatAmount(totalExpense) }}</div>
+        <div class="stat-value text-danger">-{{ formatAmount(totalExpense) }}</div>
       </div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon" style="color: var(--info)">🎯</div>
+      <div class="stat-icon" style="color: var(--info)">%</div>
       <div class="stat-info">
         <div class="stat-label">Savings Rate</div>
-        <div class="stat-value" style="color: var(--info)">{{ (totalIncome > 0 ? (netSavings / totalIncome * 100) : 0) | number:'1.0-1' }}%</div>
+        <div class="stat-value text-info">{{ (totalIncome > 0 ? (netSavings / totalIncome * 100) : 0) | number:'1.0-1' }}%</div>
       </div>
     </div>
   </div>
 
   <div class="grid-3">
-    <div class="card" style="grid-column: span 2;">
+    <div class="card chart-card">
       <div class="card-header">
-        <div class="card-title">Income vs Expenses</div>
+        <div>
+          <div class="card-title">Income vs Expenses</div>
+          <div class="card-subtitle">Monthly cashflow comparison</div>
+        </div>
       </div>
-      <div style="height: 300px;">
+      <div class="chart-wrap">
         <canvas id="incomeExpenseChart"></canvas>
       </div>
     </div>
 
     <div class="card">
       <div class="card-header">
-        <div class="card-title">Recent Activity</div>
+        <div>
+          <div class="card-title">Recent Activity</div>
+          <div class="card-subtitle">Latest money movements</div>
+        </div>
       </div>
-      <div class="card-body" style="padding-top: 0;">
+      <div class="card-body">
         <div class="activity-list">
           @for (transaction of recentTransactions; track transaction.id) {
             <div class="activity-item">
@@ -62,33 +67,6 @@
             <div class="empty-state">No recent transactions</div>
           }
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">Active Budgets</div>
-    </div>
-    <div class="card-body">
-      <div class="budget-summary-grid">
-        @for (budget of budgetSummary; track budget.name) {
-          <div class="budget-summary-item">
-            <div class="budget-summary-info">
-              <span class="budget-name">{{ budget.name }}</span>
-              <span class="budget-percentage">{{ budget.progress | number:'1.0-0' }}%</span>
-            </div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar" 
-                   [class.danger]="budget.progress >= 100" 
-                   [class.ok]="budget.progress < 100"
-                   [style.width.%]="budget.progress > 100 ? 100 : budget.progress"></div>
-            </div>
-          </div>
-        }
-        @if (!budgetSummary.length) {
-          <div class="empty-state" style="grid-column: span 3;">No active budgets found</div>
-        }
       </div>
     </div>
   </div>
