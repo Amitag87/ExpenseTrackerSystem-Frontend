@@ -1,0 +1,75 @@
+.td-date {
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.td-title {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.td-method {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px 10px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.td-amount {
+  text-align: right;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+
+.td-amount.expense { color: var(--danger); }
+.td-amount.income { color: var(--primary); }
+
+.td-actions {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.footer-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.footer-total {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+.checkbox-group input {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.checkbox-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dim);
+  cursor: pointer;
+}

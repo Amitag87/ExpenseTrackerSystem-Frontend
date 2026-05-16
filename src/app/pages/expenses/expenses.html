@@ -1,0 +1,145 @@
+<div class="page-content-inner">
+  <div class="page-actions">
+    <button class="btn btn-primary" (click)="openCreate()">+ Add Expense</button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="card" style="padding:16px;color:var(--danger);margin-bottom:24px">{{ errorMessage }}</div>
+  }
+
+  <div class="card">
+    <div class="card-header">
+      <div class="table-filters">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input class="form-control" type="text" placeholder="Search expenses..." [(ngModel)]="searchTerm" />
+        </div>
+        <div class="filter-group">
+          <select class="form-control" [(ngModel)]="categoryFilter">
+            <option value="ALL">All Categories</option>
+            @for (category of categories; track category.categoryId) {
+              <option [value]="category.categoryId">{{ category.name }}</option>
+            }
+          </select>
+          <select class="form-control" [(ngModel)]="methodFilter">
+            <option value="ALL">All Methods</option>
+            @for (method of paymentMethods; track method) {
+              <option [value]="method">{{ method }}</option>
+            }
+          </select>
+          <select class="form-control" [(ngModel)]="timeFilter">
+            <option value="THIS_MONTH">This Month</option>
+            <option value="LAST_MONTH">Last Month</option>
+            <option value="ALL">All Time</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-body" style="padding:0">
+      @if (loading) {
+        <div style="padding:40px;color:var(--text-dim);text-align:center">Loading records...</div>
+      } @else {
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Method</th>
+              <th style="text-align:right">Amount</th>
+              <th style="text-align:center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (expense of filteredExpenses; track expense.expenseId) {
+              <tr>
+                <td class="td-date">{{ expense.date | date:'MMM d, y' }}</td>
+                <td class="td-title">{{ expense.title }}</td>
+                <td><span class="pill">{{ categoryName(expense.categoryId) }}</span></td>
+                <td><span class="td-method">{{ expense.paymentMethod || 'N/A' }}</span></td>
+                <td class="td-amount expense">-{{ formatAmount(expense.amount) }}</td>
+                <td class="td-actions">
+                  <button class="btn btn-outline btn-sm" (click)="openEdit(expense)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteExpense(expense)">Delete</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        
+        @if (!filteredExpenses.length) {
+          <div style="padding:60px;text-align:center;color:var(--text-dim)">No matching expenses found.</div>
+        }
+      }
+    </div>
+    
+    <div class="table-footer">
+      <span class="footer-count">Showing {{ filteredExpenses.length }} entries</span>
+      <span class="footer-total">Total: <span class="text-danger">-{{ formatAmount(totalAmount) }}</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overhaul -->
+<div class="modal-overlay" [class.open]="modal.isOpen('addExpense')" (click)="modal.close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">{{ editingExpenseId ? 'Edit Expense' : 'Add Expense' }}</span>
+      <button class="modal-close" (click)="modal.close()">&times;</button>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <input class="form-control" [(ngModel)]="form.title" placeholder="e.g. Grocery Shopping" />
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Amount</label>
+        <input class="form-control" [(ngModel)]="form.amount" type="number" placeholder="0.00" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input class="form-control" [(ngModel)]="form.date" type="date" />
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-control" [(ngModel)]="form.categoryId">
+          <option [ngValue]="null">Select Category</option>
+          @for (category of categories; track category.categoryId) {
+            <option [ngValue]="category.categoryId">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payment Method</label>
+        <select class="form-control" [(ngModel)]="form.paymentMethod">
+          @for (method of paymentMethods; track method) {
+            <option [value]="method">{{ method }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <textarea class="form-control" rows="2" [(ngModel)]="form.notes" placeholder="Optional notes..."></textarea>
+    </div>
+    
+    <div class="checkbox-group">
+      <input type="checkbox" id="isRecurring2" [(ngModel)]="form.isRecurring" />
+      <label for="isRecurring2">Mark as recurring transaction</label>
+    </div>
+    
+    <div class="form-actions" style="margin-top:24px">
+      <button class="btn btn-outline" (click)="modal.close()">Cancel</button>
+      <button class="btn btn-primary" (click)="saveExpense()" [disabled]="saving || !form.categoryId">
+        {{ saving ? 'Processing...' : (editingExpenseId ? 'Update' : 'Save Expense') }}
+      </button>
+    </div>
+  </div>
+</div>

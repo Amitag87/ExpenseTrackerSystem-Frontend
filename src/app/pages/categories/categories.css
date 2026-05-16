@@ -1,0 +1,52 @@
+.cat-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.td-icon {
+  font-size: 18px;
+  text-align: center;
+}
+
+.td-actions {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.color-picker-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.color-input {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(2, 6, 23, 0.35);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.color-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-input::-webkit-color-swatch {
+  border: none;
+  border-radius: 10px;
+}
+
+.color-hex {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dim);
+}

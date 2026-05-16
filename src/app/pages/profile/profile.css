@@ -1,0 +1,6 @@
+.page-content-inner {
+  padding: var(--page-pad);
+  max-width: 1480px;
+  margin: 0 auto;
+  width: 100%;
+}

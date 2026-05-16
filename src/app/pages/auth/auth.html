@@ -1,0 +1,128 @@
+<div class="auth-centered-container">
+  <!-- Dynamic Mesh Background -->
+  <div class="mesh-container">
+    <div class="mesh-circle circle-1"></div>
+    <div class="mesh-circle circle-2"></div>
+    <div class="mesh-circle circle-3"></div>
+  </div>
+
+  <div class="auth-glass-card">
+    <div class="auth-card-inner">
+      <!-- Logo Section -->
+      <div class="auth-logo-centered">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="var(--primary)" />
+          <path d="M2 17L12 22L22 17" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M2 12L12 17L22 12" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h1 class="brand-name-large">SpendSmart</h1>
+      </div>
+
+      <div class="auth-header-centered">
+        <h2 class="auth-title-large">{{ activeTab === 'login' ? 'Welcome back' : 'Create an account' }}</h2>
+        <p class="auth-subtitle-large">
+          {{ activeTab === 'login' ? 'Securely sign in to manage your financial future' : 'Join thousands of users mastering their money' }}
+        </p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="tabs-modern">
+        <button [class.active]="activeTab === 'login'" (click)="switchTab('login')">Sign In</button>
+        <button [class.active]="activeTab === 'register'" (click)="switchTab('register')">Register</button>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-toast">
+        <span class="error-badge">Error</span>
+        {{ errorMessage }}
+      </div>
+
+      <form (submit)="$event.preventDefault()" class="modern-form">
+        <!-- LOGIN FLOW -->
+        <ng-container *ngIf="activeTab === 'login'">
+          <div class="input-field">
+            <label>Email address</label>
+            <input type="email" placeholder="name@company.com" [(ngModel)]="loginForm.email" name="loginEmail" />
+          </div>
+          
+          <div class="input-field">
+            <div class="label-row">
+              <label>Password</label>
+              <a href="javascript:void(0)" class="forgot-link">Forgot password?</a>
+            </div>
+            <div class="password-wrapper">
+              <input [type]="showPassword ? 'text' : 'password'" placeholder="Enter password" [(ngModel)]="loginForm.password" name="loginPassword" />
+              <button type="button" class="visibility-btn" (click)="togglePassword()">
+                {{ showPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-footer-row">
+            <label class="custom-checkbox">
+              <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
+              <span class="checkmark"></span>
+              Keep me signed in
+            </label>
+          </div>
+
+          <button class="btn-submit-modern" (click)="doLogin()" [disabled]="loading">
+            <span *ngIf="!loading">Sign In</span>
+            <span *ngIf="loading" class="spinner-small"></span>
+          </button>
+        </ng-container>
+
+        <!-- REGISTER FLOW -->
+        <ng-container *ngIf="activeTab === 'register'">
+          <div class="form-grid-modern">
+            <div class="input-field">
+              <label>First Name</label>
+              <input type="text" placeholder="John" [(ngModel)]="registerForm.firstName" name="firstName" />
+            </div>
+            <div class="input-field">
+              <label>Last Name</label>
+              <input type="text" placeholder="Doe" [(ngModel)]="registerForm.lastName" name="lastName" />
+            </div>
+          </div>
+
+          <div class="input-field">
+            <label>Email address</label>
+            <input type="email" placeholder="name@company.com" [(ngModel)]="registerForm.email" name="regEmail" />
+          </div>
+
+          <div class="input-field">
+            <label>Password</label>
+            <div class="password-wrapper">
+              <input [type]="showPassword ? 'text' : 'password'" placeholder="At least 8 characters" [(ngModel)]="registerForm.password" name="regPassword" />
+              <button type="button" class="visibility-btn" (click)="togglePassword()">
+                {{ showPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
+          </div>
+
+          <button class="btn-submit-modern" (click)="doRegister()" [disabled]="loading">
+            <span *ngIf="!loading">Create Account</span>
+            <span *ngIf="loading" class="spinner-small"></span>
+          </button>
+        </ng-container>
+
+        <div class="divider-modern">
+          <span>or use your social account</span>
+        </div>
+
+        <button type="button" class="btn-google-modern" (click)="loginWithGoogle()" [disabled]="loading">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+      </form>
+      
+      <div class="auth-footer-minimal">
+        Secure transactions protected by 256-bit SSL encryption.
+      </div>
+    </div>
+  </div>
+</div>
